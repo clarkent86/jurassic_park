@@ -46,7 +46,12 @@ comments or thoughts about the project are also welcome.
 (Cages on their power status and dinosaurs on species).
 - Automated tests that ensure the business logic implemented is correct.
 
-### Other Additions (outside given prompt)
-- Diet Specifics
-- Saddles (people friendly)
+### Other Ideas (outside given prompt)
+- Can't have multiple dinosaurs with the same name
+- More Diet Specifics
+- people friendly cages (do they need power? is power an electric fence?)
 - Breeding
+- Jail break! reassign dinosaurs, tally losses (dino and human??)
+- Suggest an available cage when failure to add dinosaur to a cage
+- Bulk Add
+- Chef Goldblum
