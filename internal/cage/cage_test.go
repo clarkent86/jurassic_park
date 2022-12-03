@@ -12,19 +12,21 @@ var testAddDescriptions = []string{
 	"successful add carnivorous dinosaur to empty powered cage",
 	"successful add herbivorous dinosaur to empty powered cage",
 	"failure to add dinosaur to down cage",
-	"successful add to cage with existing dinosaur",
-	"failure to add to cage at max capacity",
 	"successful add like carnivorous dinosaur to existing carnivorous cage",
+	"failure to add to cage at max capacity",
 	"failure add carnivorous dinosaur to existing carnivorous cage with unlike species",
 	"successful add herbivorous dinosaur to existing herbivorous cage with like species",
 	"successful add herbivorous dinosaur to existing herbivorous cage with unlike species",
+	"failure to add carnivorous dinosaur to existing herbivorous cage",
+	"failure to add herbivorous dinosaur to existing carnivorous cage",
 }
 
 var testFirstCarnivorousDinosaur = dinosaur.Dinosaur{Name: "T-Rex", Species: "Tyrannosaurus"}
 var testSecondCarnivorousDinosaur = dinosaur.Dinosaur{Name: "V-Raptor", Species: "Velociraptor"}
-var testHerbivorousDinosaur = dinosaur.Dinosaur{Name: "B-Saurus", Species: "Brachiosaurus"}
+var testFirstHerbivorousDinosaur = dinosaur.Dinosaur{Name: "B-Saurus", Species: "Brachiosaurus"}
+var testSecondHerbivorousDinosaur = dinosaur.Dinosaur{Name: "S-Saurus", Species: "Stegosaurus"}
 
-func TestInitDinosaur(t *testing.T) {
+func TestAddDinosaurToCage(t *testing.T) {
 	tests := []struct {
 		description   string
 		dinosaurToAdd dinosaur.Dinosaur
@@ -53,17 +55,17 @@ func TestInitDinosaur(t *testing.T) {
 		},
 	}, { // successful add herbivorous dinosaur to empty powered cage
 		description:   testAddDescriptions[1],
-		dinosaurToAdd: testHerbivorousDinosaur,
+		dinosaurToAdd: testFirstHerbivorousDinosaur,
 		expectedCage: Cage{
 			Capacity: 1,
 			Dinosaurs: []dinosaur.Dinosaur{
-				testHerbivorousDinosaur,
+				testFirstHerbivorousDinosaur,
 			},
 			Name:        testAddDescriptions[1],
 			PowerStatus: "ACTIVE",
 			Type:        "herbivorous",
 		},
-		expectedError: errors.New("[internal][cage] cannot add a dinosaur to a down cage"),
+		expectedError: nil,
 		initialCage: Cage{
 			Capacity:    1,
 			Dinosaurs:   []dinosaur.Dinosaur{},
@@ -81,7 +83,7 @@ func TestInitDinosaur(t *testing.T) {
 			PowerStatus: "DOWN",
 			Type:        "",
 		},
-		expectedError: errors.New("[internal][cage] cannot add a dinosaur to a down cage"),
+		expectedError: errors.New(errPrefix + errDownCage),
 		initialCage: Cage{
 			Capacity:    1,
 			Dinosaurs:   []dinosaur.Dinosaur{},
@@ -91,7 +93,7 @@ func TestInitDinosaur(t *testing.T) {
 		},
 	}, { // successful add to cage with existing dinosaur
 		description:   testAddDescriptions[3],
-		dinosaurToAdd: dinosaur.Dinosaur{Name: "T-Rex", Species: "tyrannosaurus"},
+		dinosaurToAdd: testFirstCarnivorousDinosaur,
 		expectedCage: Cage{
 			Capacity: 2,
 			Dinosaurs: []dinosaur.Dinosaur{
@@ -114,7 +116,7 @@ func TestInitDinosaur(t *testing.T) {
 		},
 	}, { // failure to add to cage at max capacity
 		description:   testAddDescriptions[4],
-		dinosaurToAdd: dinosaur.Dinosaur{Name: "T-Rex", Species: "tyrannosaurus"},
+		dinosaurToAdd: testFirstCarnivorousDinosaur,
 		expectedCage: Cage{
 			Capacity: 1,
 			Dinosaurs: []dinosaur.Dinosaur{
@@ -124,7 +126,7 @@ func TestInitDinosaur(t *testing.T) {
 			PowerStatus: "ACTIVE",
 			Type:        "carnivorous",
 		},
-		expectedError: errors.New("[internal][cage] cannot add dinosaur - cage is at max capacity"),
+		expectedError: errors.New(errPrefix + errMaxCapacity),
 		initialCage: Cage{
 			Capacity: 1,
 			Dinosaurs: []dinosaur.Dinosaur{
@@ -134,15 +136,173 @@ func TestInitDinosaur(t *testing.T) {
 			PowerStatus: "ACTIVE",
 			Type:        "carnivorous",
 		},
+	}, { // failure add carnivorous dinosaur to existing carnivorous cage with unlike species
+		description:   testAddDescriptions[5],
+		dinosaurToAdd: testSecondCarnivorousDinosaur,
+		expectedCage: Cage{
+			Capacity: 2,
+			Dinosaurs: []dinosaur.Dinosaur{
+				testFirstCarnivorousDinosaur,
+			},
+			Name:        testAddDescriptions[5],
+			PowerStatus: "ACTIVE",
+			Type:        "carnivorous",
+		},
+		expectedError: errors.New(errPrefix + errUnlikeCarnivores),
+		initialCage: Cage{
+			Capacity: 2,
+			Dinosaurs: []dinosaur.Dinosaur{
+				testFirstCarnivorousDinosaur,
+			},
+			Name:        testAddDescriptions[5],
+			PowerStatus: "ACTIVE",
+			Type:        "carnivorous",
+		},
+	}, { // successful add herbivorous dinosaur to existing herbivorous cage with like species
+		description:   testAddDescriptions[6],
+		dinosaurToAdd: testFirstHerbivorousDinosaur,
+		expectedCage: Cage{
+			Capacity: 2,
+			Dinosaurs: []dinosaur.Dinosaur{
+				testFirstHerbivorousDinosaur,
+				testFirstHerbivorousDinosaur,
+			},
+			Name:        testAddDescriptions[6],
+			PowerStatus: "ACTIVE",
+			Type:        "herbivorous",
+		},
+		expectedError: nil,
+		initialCage: Cage{
+			Capacity: 2,
+			Dinosaurs: []dinosaur.Dinosaur{
+				testFirstHerbivorousDinosaur,
+			},
+			Name:        testAddDescriptions[6],
+			PowerStatus: "ACTIVE",
+			Type:        "herbivorous",
+		},
+	}, { //successful add herbivorous dinosaur to existing herbivorous cage with unlike species
+		description:   testAddDescriptions[7],
+		dinosaurToAdd: testSecondHerbivorousDinosaur,
+		expectedCage: Cage{
+			Capacity: 2,
+			Dinosaurs: []dinosaur.Dinosaur{
+				testFirstHerbivorousDinosaur,
+				testSecondHerbivorousDinosaur,
+			},
+			Name:        testAddDescriptions[7],
+			PowerStatus: "ACTIVE",
+			Type:        "herbivorous",
+		},
+		expectedError: nil,
+		initialCage: Cage{
+			Capacity: 2,
+			Dinosaurs: []dinosaur.Dinosaur{
+				testFirstHerbivorousDinosaur,
+			},
+			Name:        testAddDescriptions[7],
+			PowerStatus: "ACTIVE",
+			Type:        "herbivorous",
+		},
+	}, { // failure to add carnivorous dinosaur to existing herbivorous cage
+		description:   testAddDescriptions[8],
+		dinosaurToAdd: testFirstCarnivorousDinosaur,
+		expectedCage: Cage{
+			Capacity: 2,
+			Dinosaurs: []dinosaur.Dinosaur{
+				testFirstHerbivorousDinosaur,
+			},
+			Name:        testAddDescriptions[8],
+			PowerStatus: "ACTIVE",
+			Type:        "herbivorous",
+		},
+		expectedError: errors.New(errPrefix + errAddCarnivoreToHerbivorous),
+		initialCage: Cage{
+			Capacity: 2,
+			Dinosaurs: []dinosaur.Dinosaur{
+				testFirstHerbivorousDinosaur,
+			},
+			Name:        testAddDescriptions[8],
+			PowerStatus: "ACTIVE",
+			Type:        "herbivorous",
+		},
+	}, { // failure to add herbivorous dinosaur to existing carnivorous cage
+		description:   testAddDescriptions[9],
+		dinosaurToAdd: testFirstHerbivorousDinosaur,
+		expectedCage: Cage{
+			Capacity: 2,
+			Dinosaurs: []dinosaur.Dinosaur{
+				testFirstCarnivorousDinosaur,
+			},
+			Name:        testAddDescriptions[9],
+			PowerStatus: "ACTIVE",
+			Type:        "carnivorous",
+		},
+		expectedError: errors.New(errPrefix + errAddHerbivoreToCarnivorous),
+		initialCage: Cage{
+			Capacity: 2,
+			Dinosaurs: []dinosaur.Dinosaur{
+				testFirstCarnivorousDinosaur,
+			},
+			Name:        testAddDescriptions[9],
+			PowerStatus: "ACTIVE",
+			Type:        "carnivorous",
+		},
 	}}
 
 	for _, test := range tests {
 		t.Run(test.description, func(t *testing.T) {
-			err := test.initialCage.AddDinosaurToCage(test.dinosaurToAdd)
-			assert.Equal(t, test.expectedCage, test.initialCage)
-			if assert.Error(t, err) {
-				assert.Equal(t, test.expectedError, err)
+
+			var park Park
+			// setup existing cage for test
+			if test.initialCage.Name != "" {
+				park.addCage(test.initialCage.Name, test.initialCage.Capacity)
+				if test.initialCage.PowerStatus == "ACTIVE" {
+					park.togglePower(test.initialCage.Name)
+				}
+				if len(test.initialCage.Dinosaurs) > 0 {
+					for _, dino := range test.initialCage.Dinosaurs {
+						park.addDinosaurToCage(test.initialCage.Name, dino.Name, dino.Species)
+					}
+				}
 			}
+
+			err := park.addDinosaurToCage(test.initialCage.Name, test.dinosaurToAdd.Name, test.dinosaurToAdd.Species)
+			assert.Equal(t, test.expectedCage, park.cages[test.initialCage.Name])
+			assert.Equal(t, test.expectedError, err)
 		})
 	}
 }
+
+// func TestAddCage(t *testing.T) {
+// 	tests := []struct {
+// 		description   string
+// 		expectedError error
+// 		cageName      string
+// 		existingCages []Cage
+// 	}{{ // successful add cage
+// 		description:   testAddDescriptions[0],
+// 		expectedCage: Cage{
+// 			Capacity: 1,
+// 			Dinosaurs: []dinosaur.Dinosaur{
+// 			},
+// 			Name:        "successful add cage",
+// 			PowerStatus: "ACTIVE",
+// 			Type:        "carnivorous",
+// 		},
+// 		expectedError: nil,
+// 		existingCages: []Cage{},
+// 		},
+// 	}}
+
+// 	for _, test := range tests {
+// 		t.Run(test.description, func(t *testing.T) {
+
+// 			err := AddDinosaurToCage(test.initialCage.Name, test.dinosaurToAdd)
+// 			assert.Equal(t, test.expectedCage, test.initialCage)
+// 			if assert.Error(t, err) {
+// 				assert.Equal(t, test.expectedError, err)
+// 			}
+// 		})
+// 	}
+// }

@@ -48,10 +48,16 @@ comments or thoughts about the project are also welcome.
 
 ### Other Ideas (outside given prompt)
 - Can't have multiple dinosaurs with the same name
-- More Diet Specifics
+- More Diet Specifics (quantity per cage)
 - people friendly cages (do they need power? is power an electric fence?)
 - Breeding
 - Jail break! reassign dinosaurs, tally losses (dino and human??)
 - Suggest an available cage when failure to add dinosaur to a cage
-- Bulk Add
+- Bulk Add/Delete dinosaurs or create cage with bulk dinosaurs
 - Chef Goldblum
+
+### General Thoughts to improve/TODOs
+- repackage Gorilla/Mux helpers into an external package and make versioning paths more dynamic
+
+### Notes
+- Gorilla/Mux was used as it's similar to Gin, but preferred for native support of Golang's internal context package

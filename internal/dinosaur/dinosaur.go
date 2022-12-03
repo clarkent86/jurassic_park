@@ -29,14 +29,14 @@ func InitDinosaur(name, species string) (Dinosaur, error) {
 
 /*
 GetDiet
-returns the high level diet of the dinosaur's species
+returns the diet of the given dinosaur's species
 */
 func (dinosaur Dinosaur) GetDiet() (string, error) {
 	switch strings.ToLower(dinosaur.Species) {
 	case "tyrannosaurus", "velociraptor", "spinosaurus", "megalosaurus":
-		return "carnivore", nil
+		return "carnivorous", nil
 	case "brachiosaurus", "stegosaurus", "ankylosaurus", "triceratops":
-		return "herbivore", nil
+		return "herbivorous", nil
 	}
 	return "", errors.New("something went wrong determining the dinosaur's diet")
 }
@@ -45,8 +45,8 @@ func (dinosaur Dinosaur) GetDiet() (string, error) {
 isDinoEggAvailable
 helper function to quickly return the availability of the given dinosaur species
 
-TODO: compile a full list of dinos to differentiate between existence and
-gibberish species for a more specific error message
+TODO: compile a full list of dinosaurs to differentiate between existence and
+gibberish or misspelled species for a more specific error message
 */
 func isDinoEggAvailable(speciesName string) bool {
 	for _, v := range dinoPool {
