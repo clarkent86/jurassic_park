@@ -9,64 +9,53 @@ import (
 func TestInitDinosaur(t *testing.T) {
 	tests := []struct {
 		description      string
-		name             string
-		species          string
+		dinosaurToAdd    Dinosaur
 		expectedCreation Dinosaur
 	}{{
 		description:      "initialize Tyrannosaurus",
-		name:             "T-Rex",
-		species:          "Tyrannosaurus",
+		dinosaurToAdd:    Dinosaur{"T-Rex", "Tyrannosaurus"},
 		expectedCreation: Dinosaur{Name: "T-Rex", Species: "Tyrannosaurus"},
 	}, {
 		description:      "initialize Velociraptor lower-case",
-		name:             "V-Rap",
-		species:          "Velociraptor",
+		dinosaurToAdd:    Dinosaur{"V-Rap", "Velociraptor"},
 		expectedCreation: Dinosaur{Name: "V-Rap", Species: "Velociraptor"},
 	}, {
 		description:      "initialize Spinosaurus upper-case",
-		name:             "S-aurus",
-		species:          "SPINOSAURUS",
+		dinosaurToAdd:    Dinosaur{"S-aurus", "SPINOSAURUS"},
 		expectedCreation: Dinosaur{Name: "S-aurus", Species: "SPINOSAURUS"},
 	}, {
 		description:      "initialize Megalosaurus mixed-case",
-		name:             "M-aurus",
-		species:          "MeGaLoSaUrUs",
+		dinosaurToAdd:    Dinosaur{"M-aurus", "MeGaLoSaUrUs"},
 		expectedCreation: Dinosaur{Name: "M-aurus", Species: "MeGaLoSaUrUs"},
 	}, {
 		description:      "initialize Brachiosaurus",
-		name:             "B-Saurus",
-		species:          "Brachiosaurus",
+		dinosaurToAdd:    Dinosaur{"B-Saurus", "Brachiosaurus"},
 		expectedCreation: Dinosaur{Name: "B-Saurus", Species: "Brachiosaurus"},
 	}, {
 		description:      "initialize Stegosaurus same name as species",
-		name:             "Stegosaurus",
-		species:          "Stegosaurus",
+		dinosaurToAdd:    Dinosaur{"Stegosaurus", "Stegosaurus"},
 		expectedCreation: Dinosaur{Name: "Stegosaurus", Species: "Stegosaurus"},
 	}, {
 		description:      "initialize Ankylosaurus",
-		name:             "A-saurus",
-		species:          "Ankylosaurus",
+		dinosaurToAdd:    Dinosaur{"A-saurus", "Ankylosaurus"},
 		expectedCreation: Dinosaur{Name: "A-saurus", Species: "Ankylosaurus"},
 	}, {
 		description:      "initialize Triceratops",
-		name:             "T-tops",
-		species:          "Triceratops",
+		dinosaurToAdd:    Dinosaur{"T-tops", "Triceratops"},
 		expectedCreation: Dinosaur{Name: "T-tops", Species: "Triceratops"},
 	}, {
 		description:      "mispelling",
-		name:             "T-tops",
-		species:          "Tricerratops",
+		dinosaurToAdd:    Dinosaur{"T-tops", "Tricerratops"},
 		expectedCreation: Dinosaur{},
 	}, {
 		description:      "non-synthesised dinosaur",
-		name:             "Crandios",
-		species:          "Fukuiraptor",
+		dinosaurToAdd:    Dinosaur{"Crandios", "Fukuiraptor"},
 		expectedCreation: Dinosaur{},
 	}}
 
 	for _, test := range tests {
-		t.Run(test.name, func(t *testing.T) {
-			dinosaur, _ := InitDinosaur(test.name, test.species)
+		t.Run(test.description, func(t *testing.T) {
+			dinosaur, _ := InitDinosaur(test.dinosaurToAdd.Name, test.dinosaurToAdd.Species)
 			assert.Equal(t, test.expectedCreation, dinosaur)
 		})
 	}
