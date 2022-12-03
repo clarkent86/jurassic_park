@@ -8,6 +8,8 @@ import (
 	"github.com/gorilla/mux"
 )
 
+const v1 = "api/v1"
+
 type responseObject struct {
 	CageState  Cage
 	StatusCode int
@@ -30,8 +32,8 @@ func (h Handler) AddRoute(r *mux.Router) {
 func (park *Park) AddDinosaurToCageHandler(prefix string) Handler {
 	return Handler{
 		Route: func(r *mux.Route) {
-			v1 := r.PathPrefix("/api/v1")
-			v1.Path("add/dinosaur")
+			v1 := r.PathPrefix(v1)
+			v1.Path(prefix)
 		},
 		Func: func(w http.ResponseWriter, r *http.Request) {
 			cageName := r.URL.Query().Get("cageName")
@@ -45,11 +47,11 @@ func (park *Park) AddDinosaurToCageHandler(prefix string) Handler {
 	}
 }
 
-func (park *Park) NewCageHandler(w http.ResponseWriter, r *http.Request) Handler {
+func (park *Park) NewCageHandler(prefix string) Handler {
 	return Handler{
 		Route: func(r *mux.Route) {
-			v1 := r.PathPrefix("/api/v1")
-			v1.Path("add/cage")
+			v1 := r.PathPrefix(v1)
+			v1.Path(prefix)
 		},
 		Func: func(w http.ResponseWriter, r *http.Request) {
 			cageName := r.URL.Query().Get("cageName")
@@ -66,11 +68,11 @@ func (park *Park) NewCageHandler(w http.ResponseWriter, r *http.Request) Handler
 
 }
 
-func (park *Park) PowerCageHandler(w http.ResponseWriter, r *http.Request) Handler {
+func (park *Park) ToggleCageHandler(prefix string) Handler {
 	return Handler{
 		Route: func(r *mux.Route) {
-			v1 := r.PathPrefix("/api/v1")
-			v1.Path("togglePower")
+			v1 := r.PathPrefix(v1)
+			v1.Path(prefix)
 		},
 		Func: func(w http.ResponseWriter, r *http.Request) {
 			cageName := r.URL.Query().Get("cageName")
