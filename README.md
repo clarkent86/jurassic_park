@@ -57,6 +57,7 @@ comments or thoughts about the project are also welcome.
 - Chef Goldblum
 
 ### General Thoughts to improve/TODOs
+- Return cages based on queryable attributes (from Bonus Points)
 - dockerize
 - environment variables to control port & potentially other environmental control
 - better format park response
@@ -80,11 +81,16 @@ The Jurassic Park app is provided with the bare Golang build/run usage.
 go run cmd/app/app.go
 ```
 
+To check that the api is available:
+```
+GET localhost:8080/api/health
+```
+
 The app is started without any cages. To get started, you need to first add a cage, power it on, and you are ready to start adding Dinosaurs!
 
 Add a cage:
 ```
-localhost:8080/add/cage
+POST localhost:8080/add/cage
 ```
 Required query parameters:
 ```
@@ -94,7 +100,7 @@ cageName: string
 
 Remove a cage:
 ```
-localhost:8080/delete/cage
+DELETE localhost:8080/delete/cage
 ```
 Required query parameters:
 ```
@@ -103,7 +109,7 @@ cageName: string
 
 Toggle cage power (when cage is empty):
 ```
-localhost:8080/togglePower
+POST localhost:8080/togglePower
 ```
 Required query parameters:
 ```
@@ -112,7 +118,7 @@ cageName: string
 
 Add dinosaur:
 ```
-localhost:8080/add/dinosaur
+POST localhost:8080/add/dinosaur
 ```
 Required query parameters:
 ```
@@ -123,7 +129,7 @@ dinosaurSpecies: string
 
 Remove a dinosaur from cage:
 ```
-localhost:8080/delete/dinosaur
+DELETE localhost:8080/delete/dinosaur
 ```
 Required query parameters:
 ```
@@ -134,6 +140,8 @@ dinosaurSpecies: string
 
 Check park status:
 ```
-localhost:8080/park/status
+GET localhost:8080/park/status
 ```
 No required query parameters
+
+I also have these available in an Insomnia collection for ease of use. Feel free to reach out and I can setup access for use!
