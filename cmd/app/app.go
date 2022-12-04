@@ -29,5 +29,10 @@ func main() {
 	park.NewCageHandler("/add/cage").AddRoute(r)
 	park.ToggleCageHandler("/togglePower").AddRoute(r)
 
+	park.RemoveCageHandler("/delete/cage").AddRoute(r)
+	park.RemoveDinosaurFromCageHandler("/delete/dinosaur").AddRoute(r)
+
+	park.GetParkStatusHandler("/park/status").AddRoute(r)
+
 	sugar.Fatal(http.ListenAndServe(":8080", r))
 }

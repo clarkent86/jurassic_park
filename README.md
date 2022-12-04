@@ -57,7 +57,91 @@ comments or thoughts about the project are also welcome.
 - Chef Goldblum
 
 ### General Thoughts to improve/TODOs
-- repackage Gorilla/Mux helpers into an external package and make versioning paths more dynamic
+- Return cages based on queryable attributes (from Bonus Points)
+- dockerize
+- environment variables to control port & potentially other environmental control
+- better format park response
+- better http status response codes for errors
+- flesh out http response testing (asserting expected error responses & bodies)
+- long term park storage (park disappears when app dies)
+- authenticate users
+- authorize users for cages
+- pass around context to allow for better use of authentication/authorization
+- reduce path redundancy...don't need add/delete in path if I have proper CRUD methods (which I do now!)
+- Swagger docs...using the built in Golang swagger tools to auto generate instead of typing out the Usage section here
 
 ### Notes
 - Gorilla/Mux was used as it's similar to Gin, but preferred for native support of Golang's internal context package
+
+### Usage
+
+The Jurassic Park app is provided with the bare Golang build/run usage.
+
+```bash
+go run cmd/app/app.go
+```
+
+To check that the api is available:
+```
+GET localhost:8080/api/health
+```
+
+The app is started without any cages. To get started, you need to first add a cage, power it on, and you are ready to start adding Dinosaurs!
+
+Add a cage:
+```
+POST localhost:8080/add/cage
+```
+Required query parameters:
+```
+Capacity: int
+cageName: string
+```
+
+Remove a cage:
+```
+DELETE localhost:8080/delete/cage
+```
+Required query parameters:
+```
+cageName: string
+```
+
+Toggle cage power (when cage is empty):
+```
+POST localhost:8080/togglePower
+```
+Required query parameters:
+```
+cageName: string
+```
+
+Add dinosaur:
+```
+POST localhost:8080/add/dinosaur
+```
+Required query parameters:
+```
+cageName: string
+dinosaurName: string
+dinosaurSpecies: string
+```
+
+Remove a dinosaur from cage:
+```
+DELETE localhost:8080/delete/dinosaur
+```
+Required query parameters:
+```
+cageName: string
+dinosaurName: string
+dinosaurSpecies: string
+```
+
+Check park status:
+```
+GET localhost:8080/park/status
+```
+No required query parameters
+
+I also have these available in an Insomnia collection for ease of use. Feel free to reach out and I can setup access for use!
