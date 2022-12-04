@@ -94,7 +94,7 @@ POST localhost:8080/add/cage
 ```
 Required query parameters:
 ```
-Capacity: int
+capacity: int
 cageName: string
 ```
 
