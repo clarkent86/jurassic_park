@@ -59,7 +59,7 @@ comments or thoughts about the project are also welcome.
 ### General Thoughts to improve/TODOs
 - Return cages based on queryable attributes (from Bonus Points)
 - dockerize
-- environment variables to control port & potentially other environmental control
+- environment variables to control port & potentially other environmental control (external dino pool source?)
 - better format park response
 - better http status response codes for errors
 - flesh out http response testing (asserting expected error responses & bodies)
