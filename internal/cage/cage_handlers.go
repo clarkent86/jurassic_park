@@ -8,7 +8,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-const v1 = "api/v1"
+const v1 = "/api/v1"
 
 type responseObject struct {
 	CageState  Cage
