@@ -2,6 +2,7 @@ package cage
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/clarkent86/jurassic_park/internal/dinosaur"
 )
@@ -60,14 +61,14 @@ func (park *Park) addDinosaurToCage(cageName string, dinosaurName, dinosaurSpeci
 	}
 
 	if cage.Type != dinosaurDiet {
-		if cage.Type == "carnivorous" {
+		if cage.Type == "Carnivorous" {
 			return errors.New(errPrefix + errAddHerbivoreToCarnivorous)
 		}
 		return errors.New(errPrefix + errAddCarnivoreToHerbivorous)
 	}
 
 	// diets will be equal since we passed the last conditional
-	if cage.Type == "herbivorous" {
+	if cage.Type == "Herbivorous" {
 		cage.Dinosaurs = append(cage.Dinosaurs, dinosaur)
 		park.cages[cageName] = cage
 		return nil
@@ -104,31 +105,46 @@ func (park *Park) addCage(cageName string, capacity int) error {
 
 func (park *Park) removeCage(cageName string) error {
 	if _, found := park.cages[cageName]; !found {
-		return errors.New(errPrefix+errNonExistentCage)
+		return errors.New(errPrefix + errNonExistentCage)
 	}
-	cage := park.cages[cageName]; {
+	cage := park.cages[cageName]
+	{
 		if len(cage.Dinosaurs) > 0 {
-			return errors.New(errPrefix+ errRemoveNonEmptyCage)
+			return errors.New(errPrefix + errRemoveNonEmptyCage)
 		}
-		if cage.PowerStatus == "ACTIVE"{
-			return errors.New(errPrefix+ errRemovePoweredCage)
+		if cage.PowerStatus == "ACTIVE" {
+			return errors.New(errPrefix + errRemovePoweredCage)
 		}
 	}
-	delete(park.cages[cageName])
+	delete(park.cages, cageName)
 	return nil
 }
 
 func (park *Park) removeDinosaurFromCage(cageName, dinosaurName, dinosaurSpecies string) error {
 	if _, found := park.cages[cageName]; !found {
-		return errors.New(errPrefix+errNonExistentCage)
+		return errors.New(errPrefix + errNonExistentCage)
 	}
 	cage := park.cages[cageName]
-	for i, dinosaur := range cage.Dinosaurs{
+
+	index := -1
+	for i, dinosaur := range cage.Dinosaurs {
 		if dinosaur.Name == dinosaurName && dinosaur.Species == dinosaurSpecies {
-			delete(park.cages[cageName].Dinosaurs[i])
+			index = i
 		}
 	}
-	return errors.New(errPrefix+errDinosaurDoesNotExist)
+	if index == -1 {
+		return errors.New(errPrefix + errDinosaurDoesNotExist)
+	}
+
+	cage.Dinosaurs = append(cage.Dinosaurs[:index], cage.Dinosaurs[index+1:]...)
+
+	if len(cage.Dinosaurs) == 0 {
+		cage.Type = ""
+	}
+
+	park.cages[cageName] = cage
+
+	return nil
 }
 
 func (park *Park) togglePower(cageName string) error {
@@ -157,4 +173,20 @@ func (park *Park) togglePower(cageName string) error {
 		Type:        cage.Type,
 	}
 	return nil
+}
+
+func (cage Cage) String() string {
+	cageType := "Empty"
+	if cage.Type != "" {
+		cageType = cage.Type
+	}
+	return fmt.Sprintf("%s Cage %s:\nCapacity: %d\nDinosaurs:%q\nPower: %s", cageType, cage.Name, cage.Capacity, cage.Dinosaurs, cage.PowerStatus)
+}
+
+func (park Park) String() string {
+	returnString := ""
+	for _, cage := range park.cages {
+		returnString = returnString + "\n" + cage.String()
+	}
+	return returnString
 }

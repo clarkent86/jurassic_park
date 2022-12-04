@@ -43,7 +43,7 @@ func TestAddDinosaurToCage(t *testing.T) {
 			},
 			Name:        testAddDescriptions[0],
 			PowerStatus: "ACTIVE",
-			Type:        "carnivorous",
+			Type:        "Carnivorous",
 		},
 		expectedError: nil,
 		initialCage: Cage{
@@ -63,7 +63,7 @@ func TestAddDinosaurToCage(t *testing.T) {
 			},
 			Name:        testAddDescriptions[1],
 			PowerStatus: "ACTIVE",
-			Type:        "herbivorous",
+			Type:        "Herbivorous",
 		},
 		expectedError: nil,
 		initialCage: Cage{
@@ -102,7 +102,7 @@ func TestAddDinosaurToCage(t *testing.T) {
 			},
 			Name:        testAddDescriptions[3],
 			PowerStatus: "ACTIVE",
-			Type:        "carnivorous",
+			Type:        "Carnivorous",
 		},
 		expectedError: nil,
 		initialCage: Cage{
@@ -112,7 +112,7 @@ func TestAddDinosaurToCage(t *testing.T) {
 			},
 			Name:        testAddDescriptions[3],
 			PowerStatus: "ACTIVE",
-			Type:        "carnivorous",
+			Type:        "Carnivorous",
 		},
 	}, { // failure to add to cage at max capacity
 		description:   testAddDescriptions[4],
@@ -124,7 +124,7 @@ func TestAddDinosaurToCage(t *testing.T) {
 			},
 			Name:        testAddDescriptions[4],
 			PowerStatus: "ACTIVE",
-			Type:        "carnivorous",
+			Type:        "Carnivorous",
 		},
 		expectedError: errors.New(errPrefix + errMaxCapacity),
 		initialCage: Cage{
@@ -134,7 +134,7 @@ func TestAddDinosaurToCage(t *testing.T) {
 			},
 			Name:        testAddDescriptions[4],
 			PowerStatus: "ACTIVE",
-			Type:        "carnivorous",
+			Type:        "Carnivorous",
 		},
 	}, { // failure add carnivorous dinosaur to existing carnivorous cage with unlike species
 		description:   testAddDescriptions[5],
@@ -146,7 +146,7 @@ func TestAddDinosaurToCage(t *testing.T) {
 			},
 			Name:        testAddDescriptions[5],
 			PowerStatus: "ACTIVE",
-			Type:        "carnivorous",
+			Type:        "Carnivorous",
 		},
 		expectedError: errors.New(errPrefix + errUnlikeCarnivores),
 		initialCage: Cage{
@@ -156,7 +156,7 @@ func TestAddDinosaurToCage(t *testing.T) {
 			},
 			Name:        testAddDescriptions[5],
 			PowerStatus: "ACTIVE",
-			Type:        "carnivorous",
+			Type:        "Carnivorous",
 		},
 	}, { // successful add herbivorous dinosaur to existing herbivorous cage with like species
 		description:   testAddDescriptions[6],
@@ -169,7 +169,7 @@ func TestAddDinosaurToCage(t *testing.T) {
 			},
 			Name:        testAddDescriptions[6],
 			PowerStatus: "ACTIVE",
-			Type:        "herbivorous",
+			Type:        "Herbivorous",
 		},
 		expectedError: nil,
 		initialCage: Cage{
@@ -179,7 +179,7 @@ func TestAddDinosaurToCage(t *testing.T) {
 			},
 			Name:        testAddDescriptions[6],
 			PowerStatus: "ACTIVE",
-			Type:        "herbivorous",
+			Type:        "Herbivorous",
 		},
 	}, { //successful add herbivorous dinosaur to existing herbivorous cage with unlike species
 		description:   testAddDescriptions[7],
@@ -192,7 +192,7 @@ func TestAddDinosaurToCage(t *testing.T) {
 			},
 			Name:        testAddDescriptions[7],
 			PowerStatus: "ACTIVE",
-			Type:        "herbivorous",
+			Type:        "Herbivorous",
 		},
 		expectedError: nil,
 		initialCage: Cage{
@@ -202,7 +202,7 @@ func TestAddDinosaurToCage(t *testing.T) {
 			},
 			Name:        testAddDescriptions[7],
 			PowerStatus: "ACTIVE",
-			Type:        "herbivorous",
+			Type:        "Herbivorous",
 		},
 	}, { // failure to add carnivorous dinosaur to existing herbivorous cage
 		description:   testAddDescriptions[8],
@@ -214,7 +214,7 @@ func TestAddDinosaurToCage(t *testing.T) {
 			},
 			Name:        testAddDescriptions[8],
 			PowerStatus: "ACTIVE",
-			Type:        "herbivorous",
+			Type:        "Herbivorous",
 		},
 		expectedError: errors.New(errPrefix + errAddCarnivoreToHerbivorous),
 		initialCage: Cage{
@@ -224,7 +224,7 @@ func TestAddDinosaurToCage(t *testing.T) {
 			},
 			Name:        testAddDescriptions[8],
 			PowerStatus: "ACTIVE",
-			Type:        "herbivorous",
+			Type:        "Herbivorous",
 		},
 	}, { // failure to add herbivorous dinosaur to existing carnivorous cage
 		description:   testAddDescriptions[9],
@@ -236,7 +236,7 @@ func TestAddDinosaurToCage(t *testing.T) {
 			},
 			Name:        testAddDescriptions[9],
 			PowerStatus: "ACTIVE",
-			Type:        "carnivorous",
+			Type:        "Carnivorous",
 		},
 		expectedError: errors.New(errPrefix + errAddHerbivoreToCarnivorous),
 		initialCage: Cage{
@@ -246,7 +246,7 @@ func TestAddDinosaurToCage(t *testing.T) {
 			},
 			Name:        testAddDescriptions[9],
 			PowerStatus: "ACTIVE",
-			Type:        "carnivorous",
+			Type:        "Carnivorous",
 		},
 	}}
 

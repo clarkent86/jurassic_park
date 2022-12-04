@@ -2,6 +2,7 @@ package dinosaur
 
 import (
 	"errors"
+	"fmt"
 	"strings"
 )
 
@@ -34,9 +35,9 @@ returns the diet of the given dinosaur's species
 func (dinosaur Dinosaur) GetDiet() (string, error) {
 	switch strings.ToLower(dinosaur.Species) {
 	case "tyrannosaurus", "velociraptor", "spinosaurus", "megalosaurus":
-		return "carnivorous", nil
+		return "Carnivorous", nil
 	case "brachiosaurus", "stegosaurus", "ankylosaurus", "triceratops":
-		return "herbivorous", nil
+		return "Herbivorous", nil
 	}
 	return "", errors.New("something went wrong determining the dinosaur's diet")
 }
@@ -55,4 +56,8 @@ func isDinoEggAvailable(speciesName string) bool {
 		}
 	}
 	return false
+}
+
+func (dinosaur Dinosaur) String() string {
+	return fmt.Sprintf("Name: %s\nSpecies: %s", dinosaur.Name, dinosaur.Species)
 }
