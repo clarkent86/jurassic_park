@@ -15,6 +15,9 @@ const errAddHerbivoreToCarnivorous = "cannot add an herbivorous dinosaur to a ca
 const errNonExistentCage = "cage does not exist"
 const errCageAlreadyExists = "cage already exists"
 const errPowerCageWithDinosaurs = "cannot power down a cage with dinosaurs"
+const errRemoveNonEmptyCage = "cannot remove cage with dinosaurs"
+const errRemovePoweredCage = "cannot remove powered cage"
+const errDinosaurDoesNotExist = "dinosaur does not exist"
 
 type Park struct {
 	cages map[string]Cage
@@ -97,6 +100,35 @@ func (park *Park) addCage(cageName string, capacity int) error {
 		Type:        "",
 	}
 	return nil
+}
+
+func (park *Park) removeCage(cageName string) error {
+	if _, found := park.cages[cageName]; !found {
+		return errors.New(errPrefix+errNonExistentCage)
+	}
+	cage := park.cages[cageName]; {
+		if len(cage.Dinosaurs) > 0 {
+			return errors.New(errPrefix+ errRemoveNonEmptyCage)
+		}
+		if cage.PowerStatus == "ACTIVE"{
+			return errors.New(errPrefix+ errRemovePoweredCage)
+		}
+	}
+	delete(park.cages[cageName])
+	return nil
+}
+
+func (park *Park) removeDinosaurFromCage(cageName, dinosaurName, dinosaurSpecies string) error {
+	if _, found := park.cages[cageName]; !found {
+		return errors.New(errPrefix+errNonExistentCage)
+	}
+	cage := park.cages[cageName]
+	for i, dinosaur := range cage.Dinosaurs{
+		if dinosaur.Name == dinosaurName && dinosaur.Species == dinosaurSpecies {
+			delete(park.cages[cageName].Dinosaurs[i])
+		}
+	}
+	return errors.New(errPrefix+errDinosaurDoesNotExist)
 }
 
 func (park *Park) togglePower(cageName string) error {

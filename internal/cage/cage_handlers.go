@@ -47,6 +47,24 @@ func (park *Park) AddDinosaurToCageHandler(prefix string) Handler {
 	}
 }
 
+func (park *Park) RemoveDinosaurFromCageHandler(prefix string) Handler {
+	return Handler{
+		Route: func(r *mux.Route) {
+			v1 := r.PathPrefix(v1)
+			v1.Path(prefix)
+		},
+		Func: func(w http.ResponseWriter, r *http.Request) {
+			cageName := r.URL.Query().Get("cageName")
+			park.removeDinosaurFromCage(cageName, r.URL.Query().Get("dinosaurName"), r.URL.Query().Get("dinosaurSpecies"))
+
+			json.NewEncoder(w).Encode(responseObject{
+				CageState:  park.cages[cageName],
+				StatusCode: 200,
+			})
+		},
+	}
+}
+
 func (park *Park) NewCageHandler(prefix string) Handler {
 	return Handler{
 		Route: func(r *mux.Route) {
@@ -65,7 +83,25 @@ func (park *Park) NewCageHandler(prefix string) Handler {
 			})
 		},
 	}
+}
 
+func (park *Park) RemoveCageHandler(prefix string) Handler {
+	return Handler{
+		Route: func(r *mux.Route) {
+			v1 := r.PathPrefix(v1)
+			v1.Path(prefix)
+		},
+		Func: func(w http.ResponseWriter, r *http.Request) {
+			cageName := r.URL.Query().Get("cageName")
+			// TODO: Deal with error
+			park.removeCage(cageName)
+
+			json.NewEncoder(w).Encode(responseObject{
+				CageState:  park.cages[cageName],
+				StatusCode: 200,
+			})
+		},
+	}
 }
 
 func (park *Park) ToggleCageHandler(prefix string) Handler {
