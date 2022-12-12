@@ -10,13 +10,8 @@ import (
 
 const v1 = "/api/v1"
 
-type responseObject struct {
-	CageState  Cage
-	StatusCode int
-}
-
 type basicSuccess struct {
-	Message    string
+	Object     interface{}
 	StatusCode int
 }
 
@@ -49,8 +44,8 @@ func (park *Park) AddDinosaurToCageHandler(prefix string) Handler {
 			cageName := r.URL.Query().Get("cageName")
 			err := park.addDinosaurToCage(cageName, r.URL.Query().Get("dinosaurName"), r.URL.Query().Get("dinosaurSpecies"))
 			if err == nil {
-				json.NewEncoder(w).Encode(responseObject{
-					CageState:  park.cages[cageName],
+				json.NewEncoder(w).Encode(basicSuccess{
+					Object:     park.cages[cageName],
 					StatusCode: 200,
 				})
 			} else {
@@ -73,8 +68,8 @@ func (park *Park) RemoveDinosaurFromCageHandler(prefix string) Handler {
 			cageName := r.URL.Query().Get("cageName")
 			err := park.removeDinosaurFromCage(cageName, r.URL.Query().Get("dinosaurName"), r.URL.Query().Get("dinosaurSpecies"))
 			if err == nil {
-				json.NewEncoder(w).Encode(responseObject{
-					CageState:  park.cages[cageName],
+				json.NewEncoder(w).Encode(basicSuccess{
+					Object:     park.cages[cageName],
 					StatusCode: 200,
 				})
 			} else {
@@ -98,8 +93,8 @@ func (park *Park) NewCageHandler(prefix string) Handler {
 			capacity, _ := strconv.Atoi(r.URL.Query().Get("capacity"))
 			err := park.addCage(cageName, capacity)
 			if err == nil {
-				json.NewEncoder(w).Encode(responseObject{
-					CageState:  park.cages[cageName],
+				json.NewEncoder(w).Encode(basicSuccess{
+					Object:     park.cages[cageName],
 					StatusCode: 200,
 				})
 			} else {
@@ -123,7 +118,7 @@ func (park *Park) RemoveCageHandler(prefix string) Handler {
 			err := park.removeCage(cageName)
 			if err == nil {
 				json.NewEncoder(w).Encode(basicSuccess{
-					Message:    "cage successfully removed",
+					Object:     "cage successfully removed",
 					StatusCode: 200,
 				})
 			} else {
@@ -146,8 +141,8 @@ func (park *Park) ToggleCageHandler(prefix string) Handler {
 			cageName := r.URL.Query().Get("cageName")
 			err := park.togglePower(cageName)
 			if err == nil {
-				json.NewEncoder(w).Encode(responseObject{
-					CageState:  park.cages[cageName],
+				json.NewEncoder(w).Encode(basicSuccess{
+					Object:     park.cages[cageName],
 					StatusCode: 200,
 				})
 			} else {
@@ -167,10 +162,17 @@ func (park *Park) GetParkStatusHandler(prefix string) Handler {
 			v1.Path(prefix).Methods("GET")
 		},
 		Func: func(w http.ResponseWriter, r *http.Request) {
-			json.NewEncoder(w).Encode(basicSuccess{
-				Message:    park.String(),
-				StatusCode: 200,
-			})
+			if park.cages == nil {
+				json.NewEncoder(w).Encode(basicSuccess{
+					Object:     "No cages. Use the add cages endpoint to get started!",
+					StatusCode: 200,
+				})
+			} else {
+				json.NewEncoder(w).Encode(basicSuccess{
+					Object:     park.cages,
+					StatusCode: 200,
+				})
+			}
 		},
 	}
 }
