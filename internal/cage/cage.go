@@ -182,11 +182,3 @@ func (cage Cage) String() string {
 	}
 	return fmt.Sprintf("%s Cage %s:\nCapacity: %d\nDinosaurs:%q\nPower: %s", cageType, cage.Name, cage.Capacity, cage.Dinosaurs, cage.PowerStatus)
 }
-
-func (park Park) String() string {
-	returnString := ""
-	for _, cage := range park.cages {
-		returnString = returnString + "\n" + cage.String()
-	}
-	return returnString
-}
